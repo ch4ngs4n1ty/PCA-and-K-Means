@@ -9,14 +9,9 @@ def main():
 
     df = pd.read_csv("HW_CLUSTERING_SHOPPING_CART_v2245a.csv")
 
-    new_matrix = np.delete(df, 0, axis=1)
+    df = df.drop(df.columns[0], axis=1) # Drop the guest id
 
-    print(new_matrix)
-
-
-
-
-    sigma = pd.DataFrame.cov(df)
+    cov_matrix = pd.DataFrame.cov(df) # Covariance Matrix (20 x 20)
 
     #print(sigma)
 
