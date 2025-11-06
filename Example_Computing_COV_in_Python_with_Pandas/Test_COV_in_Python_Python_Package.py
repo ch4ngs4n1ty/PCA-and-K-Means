@@ -10,7 +10,6 @@ import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
 
-
 def main() :
 
     print("Examples from https://realpython.com/pandas-dataframe/ ")
@@ -24,66 +23,66 @@ def main() :
     print("\n")
 
     # Playing with Pandas here:
-    print(".ndim = ")
-    print(data_frame.ndim)
-
+    print(".ndim = ") # 2
+    print(data_frame.ndim) # 2 dimensional array
+ 
     # Playing with Pandas here:
     print(".shape = ")
-    print(data_frame.shape)
+    print(data_frame.shape) #(10000, 2) rows, columns
 
     # Playing with Pandas here:
     print(".size = ")
-    print(data_frame.size)
+    print(data_frame.size) #20000
     print("\n\n")
 
     # Playing with Pandas here:
-    print("data_frame.index = ");
-    print(data_frame.index);
+    print("data_frame.index = ")
+    print(data_frame.index) # From 0 to 10,000 
     print("\n")
 
-    # Playing with Pandas here:
-    print("data_frame.columns = ");
-    print(data_frame.columns);
+    # Playing with Pandas here
+    print("data_frame.columns = ") 
+    print(data_frame.columns) # ['LeftColumn', 'RightColumn'] returns the type which is object
     print("\n")
 
     ##############################################################################
     #
     #  Here we find the covariance of the data:
     #
-    sigma = pd.DataFrame.cov( data_frame )
-    print("Sigma Found Using Python = ");
+    sigma = pd.DataFrame.cov( data_frame ) # Computes sigma by using covariance built in function
+    print("Sigma Found Using Python = ")
     print( sigma )
 
     print("  ")   # Blank line
-    print( "Dr K thinks that the Sigma Should be = " );
+    print( "Dr K thinks that the Sigma Should be = " )
     print("        X          Y")
     print("X    8.487386 -7.520122")
     print("Y   -7.520122  8.501368")
 
     print("  ")   # Blank line
-    print( "Matlab thinks that the Sigma Should be = " );
+    print( "Matlab thinks that the Sigma Should be = " )
     print("       X          Y")
     print("X    8.4874   -7.5201")
     print("Y   -7.5201    8.5014")
 
     print("")
-    eigValues, eigVECTORS = eig( sigma )
+    eigValues, eigVECTORS = eig( sigma ) # Eigen Vectors from sigma
 
     print( "Eigen VECTORS =" )
-    print( np.matrix( eigVECTORS ) )
+    print( np.matrix( eigVECTORS ) ) # Converts eigen vectors into matrix
 
     print(" ")
     print( "Eigen VALUES =" )
-    print( np.matrix( eigValues ) )
+    print( np.matrix( eigValues ) ) # Converts eigan values into matrix 
 
     print(" ")
     print( "Data Frame = " )
-    print( data_frame )
+    print( data_frame ) # returns the data frame table
     print( "Data Frame.Keys = " )
-    print( data_frame.keys )
+    print( data_frame.keys ) # Keys are column names
 
     print( 'Example data : ' )
-    row2 = data_frame.iloc[1] 
+    row2 = data_frame.iloc[1] # Returns index 1 row(2) of the data INCLUDING the column name
     print("row2 = ", row2 )
     col_1 = data_frame['LeftColumn']	# Returns a "Series"
     col_2 = data_frame["RightColumn"]	# Returns a "Series"
