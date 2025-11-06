@@ -13,37 +13,39 @@ def main():
 
     df = df.drop(df.columns[0], axis=1) # Drop the guest id
 
-    cov_matrix = pd.DataFrame.cov(df) # Covariance Matrix (20 x 20)
+    cov_matrix = df.cov().values # Covariance Matrix (20 x 20)
 
     #print(sigma)
 
-    eigValues, eigVECTORS = eig( cov_matrix )
+    eigvals, eigvecs = eig( cov_matrix )
 
-    val_matrix = np.matrix(eigValues)
+    eigvals = np.real_if_close(eigvals)
+    eigvecs = np.real_if_close(eigvecs)
 
-    vector_matrix = np.matrix(eigVECTORS)
-
-    eig_array = np.array(val_matrix).flatten()
-
-    sorted_eig = eig_array[np.argsort(-np.abs(eig_array))]
+    idx = np.argsort(-np.abs(eigvals))
+    sorted_eigvals = eigvals[idx]
+    sorted_eigvecs = eigvecs[:, idx]
 
     #print(eig_array)
 
-    total = np.sum(np.abs(sorted_eig))
+    total = np.sum(np.abs(sorted_eigvals))
 
-    normalized = np.abs(sorted_eig) / total
+    normalized = np.abs(sorted_eigvals) / total
 
     cumulative = np.cumsum(normalized)
-    
+
     plt.plot(range(1, len(cumulative) + 1), cumulative, marker='o')
     plt.xlabel('Number of Eigenvalues')
     plt.ylabel('Cumulative Sum (Normalized)')
     plt.title('Cumulative Sum of Normalized Eigenvalues')
     plt.grid(True)
-    plt.show()
+    plt.close()
 
+    first_two_vec = sorted_eigvecs[:, :2].T
+    print("First two eigenvectors (rows):")
+    print(first_two_vec)
 
-    print(sorted_eig)
+    #vector_matrix = pd.DataFrame(first_two_vec)
 
 
 if __name__ == "__main__":
