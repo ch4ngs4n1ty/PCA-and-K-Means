@@ -23,5 +23,28 @@ def main():
 
     vector_matrix = np.matrix(eigVECTORS)
 
+    eig_array = np.array(val_matrix).flatten()
+
+    sorted_eig = eig_array[np.argsort(-np.abs(eig_array))]
+
+    #print(eig_array)
+
+    total = np.sum(np.abs(sorted_eig))
+
+    normalized = np.abs(sorted_eig) / total
+
+    cumulative = np.cumsum(normalized)
+    
+    plt.plot(range(1, len(cumulative) + 1), cumulative, marker='o')
+    plt.xlabel('Number of Eigenvalues')
+    plt.ylabel('Cumulative Sum (Normalized)')
+    plt.title('Cumulative Sum of Normalized Eigenvalues')
+    plt.grid(True)
+    plt.show()
+
+
+    print(sorted_eig)
+
+
 if __name__ == "__main__":
     main()
