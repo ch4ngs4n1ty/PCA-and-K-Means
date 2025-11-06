@@ -4,6 +4,8 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy.linalg import eig
+
 
 def main():
 
@@ -14,6 +16,12 @@ def main():
     cov_matrix = pd.DataFrame.cov(df) # Covariance Matrix (20 x 20)
 
     #print(sigma)
+
+    eigValues, eigVECTORS = eig( cov_matrix )
+
+    val_matrix = np.matrix(eigValues)
+
+    vector_matrix = np.matrix(eigVECTORS)
 
 if __name__ == "__main__":
     main()
