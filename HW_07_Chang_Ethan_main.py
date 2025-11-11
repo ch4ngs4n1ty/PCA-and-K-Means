@@ -13,6 +13,11 @@ def main():
 
     df = df.drop(df.columns[0], axis=1) # Drop the guest id
 
+    feature_names = df.columns.to_list()
+
+
+    # Covariance and eigendecomposition
+    
     cov_matrix = df.cov().values # Covariance Matrix (20 x 20)
 
     #print(sigma)
@@ -39,11 +44,22 @@ def main():
     plt.ylabel('Cumulative Sum (Normalized)')
     plt.title('Cumulative Sum of Normalized Eigenvalues')
     plt.grid(True)
-    plt.close()
+    
+    plt.savefig("cumulative_plot.png", dpi=300, bbox_inches='tight')
 
+
+    # First two eigenvectors that prints 1x20 rows
     first_two_vec = sorted_eigvecs[:, :2].T
     print("First two eigenvectors (rows):")
     print(first_two_vec)
+
+    # Quick attribute importance for each PC: largest |loading|
+    loadings_df = pd.DataFrame(first_two_vec, columns=feature_names, index=["PC1","PC2"])
+    for pc in ["PC1","PC2"]:
+        top = loadings_df.loc[pc].abs().sort_values(ascending=False)
+        print(f"\nTop 5 attributes for {pc} by |loading|:")
+        print(top.head(5))
+
 
     #vector_matrix = pd.DataFrame(first_two_vec)
 
