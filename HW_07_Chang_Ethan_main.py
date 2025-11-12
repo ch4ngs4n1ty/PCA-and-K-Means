@@ -98,18 +98,42 @@ def main():
 
 
     plt.figure(figsize=(7, 6))
+
     plt.scatter(projected_2d[:, 0], projected_2d[:, 1],
                 c=labels, cmap='viridis', s=30, alpha=0.8, edgecolors='k')
+    
     plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
                 c='red', marker='X', s=200, label='Cluster Centers')
+    
     plt.title(f'K-Means Clustering (k={k}) on PCA Projection')
     plt.xlabel('PC1')
     plt.ylabel('PC2')
     plt.legend()
     plt.grid(True, linestyle='--', alpha=0.5)
     plt.savefig(f'kmeans_clusters_k{k}.png', dpi=300, bbox_inches='tight')
-    plt.show()
 
+    ################################################################################################
+
+    centers = kmeans.cluster_centers_
+
+    print("\nCluster Centers (in PCA 2D space):")
+
+    for i, c in enumerate(centers):
+        print(f"Cluster {i}: PC1 = {c[0]:.4f}, PC2 = {c[1]:.4f}")
+
+
+    ################################################################################################
+
+    # Re-Projection
+
+    reprojected = np.dot(centers, top2_vecs.T)   # shape (4, 20)
+
+    # Put results into a readable DataFrame
+    reproj_df = pd.DataFrame(reprojected, columns=feature_names)
+    print("\nReprojected cluster centers back to original feature space:")
+    print(reproj_df.round(3))
+
+    reproj_df.to_csv("reprojected_cluster_centers.csv", index=False)
 
 if __name__ == "__main__":
     main()
