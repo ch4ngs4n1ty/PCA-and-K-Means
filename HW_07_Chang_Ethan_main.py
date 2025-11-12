@@ -15,7 +15,6 @@ def main():
 
     feature_names = df.columns.to_list()
 
-
     # Covariance and eigendecomposition
 
     cov_matrix = df.cov().values # Covariance Matrix (20 x 20)
@@ -52,14 +51,13 @@ def main():
     print("First two eigenvectors (rows):")
     print(first_two_vec)
 
-    # Project original data onto the first two eigenvectors 
-    X = df.values
+    X = df.values # Original data set excluding GuestID
 
-    X_centered = X - X.mean(axis=0, keepdims=True)   # center the data
+    X_centered = X - X.mean(axis=0, keepdims=True)   # Mean-centered version of X (new_data = data - all_means)
 
-    top2_vecs = sorted_eigvecs[:, :2]                # shape (20, 2)
+    top2_vecs = sorted_eigvecs[:, :2] # First two eigenvectors, each column = one eigenvector
 
-    projected_2d = np.dot(X_centered, top2_vecs)         # shape (N, 2)
+    projected_2d = np.dot(X_centered, top2_vecs) # 2D data, each row is one sample's coordinates in PC1 to PC2 space
 
     # Eigen value variances
     evr1 = sorted_eigvals[0] / sorted_eigvals.sum()
@@ -74,7 +72,6 @@ def main():
     plt.grid(True, linestyle='--', alpha=0.4)
     plt.axis('equal')
     plt.savefig('pca_scatter.png', dpi=300, bbox_inches='tight')
-    plt.show()
 
 
     # Quick attribute importance for each PC: largest |loading|
@@ -92,6 +89,26 @@ def main():
 
 
     #vector_matrix = pd.DataFrame(first_two_vec)
+
+    k = 4 # There are 4 clusters coming from the scatter plot of 2D data
+
+    kmeans = KMeans(n_clusters=k, random_state=42)
+
+    labels = kmeans.fit_predict(projected_2d)
+
+
+    plt.figure(figsize=(7, 6))
+    plt.scatter(projected_2d[:, 0], projected_2d[:, 1],
+                c=labels, cmap='viridis', s=30, alpha=0.8, edgecolors='k')
+    plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
+                c='red', marker='X', s=200, label='Cluster Centers')
+    plt.title(f'K-Means Clustering (k={k}) on PCA Projection')
+    plt.xlabel('PC1')
+    plt.ylabel('PC2')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.savefig(f'kmeans_clusters_k{k}.png', dpi=300, bbox_inches='tight')
+    plt.show()
 
 
 if __name__ == "__main__":
