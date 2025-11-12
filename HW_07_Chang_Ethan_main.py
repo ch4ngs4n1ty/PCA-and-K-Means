@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.linalg import eig
-
+from sklearn.cluster import KMeans
 
 def main():
 
@@ -17,7 +17,7 @@ def main():
 
 
     # Covariance and eigendecomposition
-    
+
     cov_matrix = df.cov().values # Covariance Matrix (20 x 20)
 
     #print(sigma)
@@ -47,14 +47,44 @@ def main():
     
     plt.savefig("cumulative_plot.png", dpi=300, bbox_inches='tight')
 
-
     # First two eigenvectors that prints 1x20 rows
     first_two_vec = sorted_eigvecs[:, :2].T
     print("First two eigenvectors (rows):")
     print(first_two_vec)
 
+    # Project original data onto the first two eigenvectors 
+    X = df.values
+
+    X_centered = X - X.mean(axis=0, keepdims=True)   # center the data
+
+    top2_vecs = sorted_eigvecs[:, :2]                # shape (20, 2)
+
+    projected_2d = np.dot(X_centered, top2_vecs)         # shape (N, 2)
+
+    # Eigen value variances
+    evr1 = sorted_eigvals[0] / sorted_eigvals.sum()
+    evr2 = sorted_eigvals[1] / sorted_eigvals.sum()
+
+    # 2D Scatter Plot of Clusters
+    plt.figure()
+    plt.scatter(projected_2d[:, 0], projected_2d[:, 1], s=20, alpha=0.85)
+    plt.xlabel(f'PC1 ({evr1:.1%} var)')
+    plt.ylabel(f'PC2 ({evr2:.1%} var)')
+    plt.title('Projection onto First Two Eigenvectors (2D Scatter)')
+    plt.grid(True, linestyle='--', alpha=0.4)
+    plt.axis('equal')
+    plt.savefig('pca_scatter.png', dpi=300, bbox_inches='tight')
+    plt.show()
+
+
     # Quick attribute importance for each PC: largest |loading|
-    loadings_df = pd.DataFrame(first_two_vec, columns=feature_names, index=["PC1","PC2"])
+    loadings_df = pd.DataFrame(first_two_vec, 
+                               columns=feature_names, 
+                               index=["PC1","PC2"])
+
+    # Outputs the two vectors
+    # PC1 is dominated by horror, classics, non-fiction, romance, and games
+    # PC2 is dominated by baby toddler, teen, self imporvement, games, and non-fiction
     for pc in ["PC1","PC2"]:
         top = loadings_df.loc[pc].abs().sort_values(ascending=False)
         print(f"\nTop 5 attributes for {pc} by |loading|:")
