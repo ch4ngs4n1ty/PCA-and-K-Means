@@ -1,5 +1,6 @@
 # Ethan Chang - CSCI 420 HW 7
-#
+# File: HW_07_Chang_Ethan_main.py
+# Compile: python HW_07_Chang_Ethan_main.py
 
 import pandas as pd 
 import matplotlib.pyplot as plt
@@ -7,6 +8,14 @@ import numpy as np
 from numpy.linalg import eig
 from sklearn.cluster import KMeans
 
+"""
+The main function of the program.
+
+Initializes the data by loading it from the csv file and cleaning it.
+Starting off with computing eigenvectors and eigenvalues.
+
+Start computing K-Means in 2-D PCA space and visualize clusters and centers.
+"""
 def main():
 
     df = pd.read_csv("HW_CLUSTERING_SHOPPING_CART_v2245a.csv")
@@ -16,10 +25,7 @@ def main():
     feature_names = df.columns.to_list()
 
     # Covariance and eigendecomposition
-
     cov_matrix = df.cov().values # Covariance Matrix (20 x 20)
-
-    #print(sigma)
 
     eigvals, eigvecs = eig( cov_matrix )
 
@@ -29,8 +35,6 @@ def main():
     idx = np.argsort(-np.abs(eigvals))
     sorted_eigvals = eigvals[idx]
     sorted_eigvecs = eigvecs[:, idx]
-
-    #print(eig_array)
 
     total = np.sum(np.abs(sorted_eigvals))
 
