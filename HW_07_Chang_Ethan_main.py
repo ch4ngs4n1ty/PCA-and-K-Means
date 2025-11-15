@@ -1,6 +1,6 @@
 # Ethan Chang and Jacky Chan - CSCI 420 HW 7
-# File: HW_07_Chang_Ethan_main.py
-# Compile: python HW_07_Chang_Ethan_main.py
+# File: HW_07_main.py
+# Compile: python HW_07_main.py
 
 import pandas as pd 
 import matplotlib.pyplot as plt
