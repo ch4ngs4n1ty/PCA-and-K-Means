@@ -1,4 +1,4 @@
-# Ethan Chang - CSCI 420 HW 7
+# Ethan Chang and Jacky Chan - CSCI 420 HW 7
 # File: HW_07_Chang_Ethan_main.py
 # Compile: python HW_07_Chang_Ethan_main.py
 
@@ -18,28 +18,35 @@ Start computing K-Means in 2-D PCA space and visualize clusters and centers.
 """
 def main():
 
-    df = pd.read_csv("HW_CLUSTERING_SHOPPING_CART_v2245a.csv")
+    df = pd.read_csv("HW_CLUSTERING_SHOPPING_CART_v2245a.csv") # Reads the csv file
 
     df = df.drop(df.columns[0], axis=1) # Drop the guest id
 
-    feature_names = df.columns.to_list()
+    feature_names = df.columns.to_list() # Column names into array (20 shopping categories)
 
     # Covariance and eigendecomposition
     cov_matrix = df.cov().values # Covariance Matrix (20 x 20)
 
-    eigvals, eigvecs = eig( cov_matrix )
+    # Computing eigenvalues and eigenvectors of covariance matrix
+    eigvals, eigvecs = eig( cov_matrix ) 
 
-    eigvals = np.real_if_close(eigvals)
-    eigvecs = np.real_if_close(eigvecs)
 
+    # Sort eigenvalues in descending order of absolute value
+    # idx is an array of indicies that sort -[eigvals] in ascending order
     idx = np.argsort(-np.abs(eigvals))
+
+    # Integrate idx into the eigvalues and eigvectors to ascending order
     sorted_eigvals = eigvals[idx]
     sorted_eigvecs = eigvecs[:, idx]
 
+    # Compute total value (sum of absolute eigenvalues) for normalization
     total = np.sum(np.abs(sorted_eigvals))
 
+    # Normalize eigenvalues by total to get fraction of variance
     normalized = np.abs(sorted_eigvals) / total
 
+    # Compute cumulative sum of variance
+    # cumulative[i] = sum of normalized eigenvalues from 1 to i + 1
     cumulative = np.cumsum(normalized)
 
     plt.plot(range(1, len(cumulative) + 1), cumulative, marker='o')
