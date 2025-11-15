@@ -18,6 +18,10 @@ Start computing K-Means in 2-D PCA space and visualize clusters and centers.
 """
 def main():
 
+    #####################################################################################################
+    # Data Initialization and building eigenvalue and eigenvector arrays
+    #####################################################################################################
+
     df = pd.read_csv("HW_CLUSTERING_SHOPPING_CART_v2245a.csv") # Reads the csv file
 
     df = df.drop(df.columns[0], axis=1) # Drop the guest id
@@ -49,13 +53,23 @@ def main():
     # cumulative[i] = sum of normalized eigenvalues from 1 to i + 1
     cumulative = np.cumsum(normalized)
 
+    #####################################################################################################
+    # Plot: The Cumulative Normalized Eigenvalues
+    #####################################################################################################
+
+    # Plot of cumulative sum
     plt.plot(range(1, len(cumulative) + 1), cumulative, marker='o')
     plt.xlabel('Number of Eigenvalues')
     plt.ylabel('Cumulative Sum (Normalized)')
     plt.title('Cumulative Sum of Normalized Eigenvalues')
-    plt.grid(True)
+    plt.grid(True) # shows grid for readability
     
+    # Save figure of the plot
     plt.savefig("cumulative_plot.png", dpi=300, bbox_inches='tight')
+
+    #####################################################################################################
+    # Take first two eigenvectors (2D Vectors)
+    #####################################################################################################
 
     # First two eigenvectors that prints 1x20 rows
     first_two_vec = sorted_eigvecs[:, :2].T
