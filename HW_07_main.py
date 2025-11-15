@@ -68,14 +68,8 @@ def main():
     plt.savefig("cumulative_plot.png", dpi=300, bbox_inches='tight')
 
     #####################################################################################################
-    # Take first two eigenvectors (2D Vectors)
+    # Mean-Centered Project 2D Data
     #####################################################################################################
-
-    # First two eigenvectors that prints 1x20 rows
-    # This vector has a shape of (2, 20) and each row is one eigenvector
-    first_two_vec = sorted_eigvecs[:, :2].T
-    print("First two eigenvectors (rows):")
-    print(first_two_vec)
 
     X = df.values # Original data set excluding GuestID (converts DataFrame to NumPy array)
 
@@ -110,6 +104,12 @@ def main():
     #####################################################################################################
     # Loadings for PC1 and PC2
     #####################################################################################################
+    
+    # First two eigenvectors that prints 1x20 rows
+    # This vector has a shape of (2, 20) and each row is one eigenvector
+    first_two_vec = sorted_eigvecs[:, :2].T
+    print("First two eigenvectors (rows):")
+    print(first_two_vec)
 
     # Quick attribute importance for each PC: largest |loading|
     # Create a dataframe (PC1, PC2) and columns are the 20 features
