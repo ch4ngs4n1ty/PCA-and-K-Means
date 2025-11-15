@@ -177,7 +177,7 @@ def main():
     reprojected = np.dot(centers, top2_vecs.T)   # shape (4, 20)
 
     # Put reprojected cluster centers into the data frame
-    reproj_df = pd.DataFrame(reprojected.round(), columns=feature_names)
+    reproj_df = pd.DataFrame(reprojected.round(3), columns=feature_names)
 
     print("\nReprojected cluster centers back to original feature space:")
 
